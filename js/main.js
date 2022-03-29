@@ -10,6 +10,7 @@
 
         //call getData function
         getData(map);
+        //createCounties(map);
         //addFilters();
         
     };
@@ -33,6 +34,7 @@
             return "black"
         }
     };
+    //used https://gis.stackexchange.com/questions/312737/filtering-interactive-leaflet-map-with-dropdown-menu response from IvanSanchez for help with layers extend
     function createShopSymbols(data,map){
         var geojsonMarkerOptions = {
             radius: 8,
@@ -41,63 +43,151 @@
             opacity: 1,
             fillOpacity: 0.8
         };
-        L.geoJson(data, {
+        var allShops = L.geoJson(data, {
             pointToLayer: function(feature,latlng){
                 geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
                 return L.circleMarker(latlng,geojsonMarkerOptions);
             },
             onEachFeature: shopPopup
-        }).addTo(map);
-    }
-    function hotDrinkFilter(data,map){
-        map.eachLayer(function(layer){
-            if (layer.feature){map.removeLayer(layer)}
-        })
-
-        var geojsonMarkerOptions = {
-            radius: 8,
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-        L.geoJson(data, {
+        });
+        var hotDrinks = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Hot_Chocolate"] == 'Y'},
             pointToLayer: function(feature,latlng){
                 geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
                 return L.circleMarker(latlng,geojsonMarkerOptions);
             },
-            onEachFeature: shopPopup,
-            filter: function(feature){if (feature.properties['Hot_Chocolate'] == 'Y'){return true}}
-        }).addTo(map);
+            onEachFeature: shopPopup
+        });
+        var frozenDrinks = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Frozen_Drinks"] == 'Y'},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var cookies = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Cookies"] == 'Y'},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var kidsDrinks = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Kids_Drinks"] == 'Y'},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var popcorn = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Popcorn"] == 'Y'},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var smallSize = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Smallest_Size"] == '12 oz.'},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var allLayers = L.layerGroup([allShops,hotDrinks,frozenDrinks,cookies,kidsDrinks,popcorn,smallSize]).addTo(map);
+        var layerControl = L.control.layers(null,{
+            "All Shops": allShops,
+            "Hot Drinks": hotDrinks,
+            "Frozen Drinks": frozenDrinks,
+            "Cookies": cookies,
+            "Special Kids Drinks": kidsDrinks,
+            "Popcorn": popcorn,
+            "12 oz. Option": smallSize
+        },{collapsed: false}).addTo(map);
+        console.log('layer control: ',layerControl.getContainer())
+        //allShops.addTo(map);
     };
+    
     //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
     function addFilters(data,map){
-        $('#panel').append('<p>Sells</p>')
-        $('#panel').append('<p><input type="checkbox" id="hot_drinks">Hot Drinks</input></p>')
-        $('#panel').append('<p><input type="checkbox" id="frozen_drinks">Frozen Drinks</input></p>');
-        $('#panel').append('<p><input type="checkbox" id="cookies">Cookies</input></p>');
-        $('#panel').append('<p><input type="checkbox" id="italian_soda">Italian Soda</input></p>');
-        $('#panel').append('<p><input type="checkbox" id="kids_drinks">Fun Kids Drinks</input></p>');
-        $('#panel').append('<p><input type="checkbox" id="tea">Iced Tea</input></p>');
-        $('#panel').append('<p><input type="checkbox" id="popcorn">Popcorn</input></p>');
-        $('#panel').append('<p><input type="checkbox" id="12oz">12 oz. Option</input></p>');
         $('#panel').append('<p><input type="range" min="$1.50" max ="$2.50" id="price">Base Price</input>');  
-
-        $('#hot_drinks').on("input",hotDrinkFilter(data,map));
     };
 
-    function addCounty(data,map){
-        $('#panel').append('<label class="switch"><input type="checkbox"><span class="slider">Counties</span></label>')
+    function addCounty(map){
+        $('#panel').append('<input type="checkbox" id="counties">Counties</input>')
+        //$('#counties').on("input",createCounties(map))
+        $("#counties").on('click',function(){
+            if ($(this).is(':checked')){
+                createCounties(map);
+            } 
+        });
+    
+        //when checkbox is unchecked then remove average symbols layer from the map
+        $("#counties").on('click',function(){
+            if (! $(this).is(':checked')){
+                removeCounties(map);
+
+            }
+        });
+    };
+
+    function addReset(data,map){
+        $('#panel').append('<button id="reset">Reset</button>')
+
+        $('#reset').on('click',function(){
+            removeCounties(map);
+            map.setView([39.3210,-111.0937]);
+            map.setZoom(6);
+            map.eachLayer(function(layer){
+                if (layer.feature){
+                    map.removeLayer(layer)
+                }
+            });
+            $('#map').remove('.leaflet-control-layers leaflet-control-layers-expanded leaflet-control')
+            createShopSymbols(data,map)
+        })
     }
+
+    function removeCounties(map){
+        map.eachLayer(function(layer){
+            if (layer.feature && layer.options.fillColor == "blue"){
+                map.removeLayer(layer)
+            }
+        })
+    }
+
+    function createCounties(map){
+        var counties = $.ajax("data/Utah_County_Boundaries.geojson", {
+            dataType: "json",
+            success: function(response){
+                L.geoJson(response, {
+                    pointToLayer: function(feature,latlng){
+                        return L.polygon(latlng);
+                    },
+                    style: function(feature){
+                        return{fillColor: "blue"}
+                    }
+                }).addTo(map);
+            }
+        });
+        //counties.addTo(map)
+        //$('#counties').on("input",function(){counties.addTo(map);})
+    };
     
     function getData(map){
+        
         //load the data
         $.ajax("data/map.geojson", {
             dataType: "json",
             success: function(response){
                 createShopSymbols(response,map);
                 addFilters(response,map);
-                addCounty(response,map);
+                addCounty(map);
+                addReset(response,map);
                 //chart(response);
             }
         });
