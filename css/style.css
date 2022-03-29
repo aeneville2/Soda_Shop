@@ -1,5 +1,20 @@
+#header{
+	font-size: 20pt;
+	text-align: center;
+	width: 100%;
+	height: auto;
+	font-weight: bold;
+}
+
 #map {
 	height: 400px;
 	width: 60%;
 	display: inline-block;
+}
+
+#panel {
+	height: 400px;
+	width: 40%;
+	float: right;
+	font-size: 12pt;
 }
