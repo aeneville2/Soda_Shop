@@ -99,6 +99,7 @@
             onEachFeature: shopPopup
         });
         var allLayers = L.layerGroup([allShops,hotDrinks,frozenDrinks,cookies,kidsDrinks,popcorn,smallSize]).addTo(map);
+        
         var layerControl = L.control.layers(null,{
             "All Shops": allShops,
             "Hot Drinks": hotDrinks,
@@ -108,7 +109,6 @@
             "Popcorn": popcorn,
             "12 oz. Option": smallSize
         },{collapsed: false}).addTo(map);
-        console.log('layer control: ',layerControl.getContainer())
         //allShops.addTo(map);
     };
     
@@ -147,10 +147,10 @@
                     map.removeLayer(layer)
                 }
             });
-            $('#map').remove('.leaflet-control-layers leaflet-control-layers-expanded leaflet-control')
-            createShopSymbols(data,map)
+            $('.leaflet-control-layers').remove();
+            createShopSymbols(data,map);
         })
-    }
+    };
 
     function removeCounties(map){
         map.eachLayer(function(layer){
@@ -158,7 +158,7 @@
                 map.removeLayer(layer)
             }
         })
-    }
+    };
 
     function createCounties(map){
         var counties = $.ajax("data/Utah_County_Boundaries.geojson", {
@@ -188,14 +188,14 @@
                 addFilters(response,map);
                 addCounty(map);
                 addReset(response,map);
-                //chart(response);
+                chart(response);
             }
         });
     };
     
     
     //d3-graph-gallery.com
-    /*function chart(data){
+    function chart(data){
         var width = 450
             height = 450
             margin = 40
@@ -211,36 +211,36 @@
             .append("g")
             .attr("class","chartG")
             .attr("transform","translate(" + width/2 + "," + height/2 + ")");
-        var shopData = data;
+        var shopData = {a:16,b:37,c:42,d:2,e:101};
         console.log(shopData)
         //console.log(shopData["Company"].count())
-        var shopArray = [];
+        /*var shopArray = [];
         for (var i=0; i<shopData.length; i++){
             var object = shopData[i]
             var val = object["Company"];
             console.log(shopData[i]["Company"])
             shopArray.push(val);
-        }
+        }*/
 
         //var shopCount = {count(shopArray[0]),shopArray[1],shopArray[2],shopArray[3],shopArray[4]};
         
-        console.log(shopArray);
+        //console.log(shopArray);
         var color = d3.scaleOrdinal()
-            .domain(shopArray)
+            .domain(shopData)
             .range(["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00"]);
         var pie = d3.pie()
             .value(function(d) {return d.value})
-        var data_ready = pie(d3.entries(shopArray))
+        var data_ready = pie(d3.entries(shopData))
         chartG.selectAll(".slices")
             .data(data_ready)
             .enter()
             .append("path")
             .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
-            .attr("fill",function(d){return(color(d.shopCount.key))})
+            .attr("fill",function(d){return(color(d.shopData.key))})
             .style("stroke","black")
             .style("stroke-width","2px")
             .style("opacity",0.7)
-    }*/
+    }
     $(document).ready(createMap);
 }) ();
 
