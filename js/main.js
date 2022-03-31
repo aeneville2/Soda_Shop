@@ -114,11 +114,11 @@
     
     //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
     function addFilters(data,map){
-        $('#panel').append('<p><input type="range" min="$1.50" max ="$2.50" id="price">Base Price</input>');  
+        $('#filter-row').append('<p><input type="range" min="$1.50" max ="$2.50" id="price">Base Price</input>');  
     };
 
     function addCounty(map){
-        $('#panel').append('<input type="checkbox" id="counties">Counties</input>')
+        $('#county-row').append('<input type="checkbox" id="counties">Counties</input>')
         //$('#counties').on("input",createCounties(map))
         $("#counties").on('click',function(){
             if ($(this).is(':checked')){
@@ -136,7 +136,7 @@
     };
 
     function addReset(data,map){
-        $('#panel').append('<button id="reset">Reset</button>')
+        $('#reset-row').append('<button id="reset">Reset</button>')
 
         $('#reset').on('click',function(){
             removeCounties(map);
@@ -194,15 +194,15 @@
     };
     
     
-    //d3-graph-gallery.com
+    //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
     function chart(data){
-        var width = 450
-            height = 450
+        var width = 250
+            height = 250
             margin = 40
 
         var radius = Math.min(width, height) / 2 - margin
 
-        var chart = d3.select("#intro")
+        var chart = d3.select("#pie-chart")
             .append("svg")
             .attr("width",width)
             .attr("height",height)
@@ -258,8 +258,11 @@
         
         console.log(swig,fiiz, sodalicious, twistedSugar, quenchIt, other);
         var color = d3.scaleOrdinal()
-            .domain(shopCount)
-            .range(["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00"]);
+            .domain(["Swig","Fiiz","Sodalicious","Twisted Sugar","Quench It!"])
+            .range(["#e41a1c","#377eb8","#984ea3","#4daf4a","#ff7f00"]);
+            //.domain(shopCount)
+            //.range(["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00"]);
+            //.range(d3.schemeSet2);
         var pie = d3.pie()
             .value(function(d) {return d.value})
         var data_ready = pie(d3.entries(shopCount))
@@ -268,10 +271,30 @@
             .enter()
             .append("path")
             .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
-            .attr("fill",function(d){return(color(d.key))})
+            .attr("fill",function(d,i){return(color(i))})
             .style("stroke","black")
             .style("stroke-width","2px")
-            .style("opacity",0.7)
+            .style("opacity",0.7);
+
+        chartG.selectAll(".slices")
+            .data(data_ready)
+            .enter()
+            .append("text")
+            .text(function(d) {return d.value + "%"})
+            .attr("transform",function(d) {return "translate(" + d3.arc().outerRadius(radius).innerRadius(radius-80).centroid(d) + ")";})
+            .style("text-anchor","middle")
+            .style("font-size",17);
+
+        var legend = d3.legendColor()
+            .shapeWidth(30)
+            .cells(5)
+            .orient('horizontal')
+            .scale(color)
+        
+        chart.append('g')
+            .attr('class','pie-legend')
+            .attr('transform','translate(20,20)')
+            .call(legend)
     }
     $(document).ready(createMap);
 }) ();

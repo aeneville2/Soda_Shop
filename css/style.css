@@ -8,17 +8,20 @@
 
 #map {
 	height: 400px;
-	width: 60%;
 	display: inline-block;
 }
 
 #panel {
 	height: 400px;
-	width: 40%;
 	float: right;
 	font-size: 12pt;
 }
 
 #reset{
-	padding: 20px;
+	margin: 5px;
+	padding: 5px;
+}
+
+.container{
+	width: 100%;
 }
