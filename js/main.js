@@ -211,7 +211,7 @@
             .append("g")
             .attr("class","chartG")
             .attr("transform","translate(" + width/2 + "," + height/2 + ")");
-        var shopData = {a:16,b:37,c:42,d:2,e:101};
+        var shopData = data;
         console.log(shopData)
         //console.log(shopData["Company"].count())
         /*var shopArray = [];
@@ -222,21 +222,53 @@
             shopArray.push(val);
         }*/
 
-        //var shopCount = {count(shopArray[0]),shopArray[1],shopArray[2],shopArray[3],shopArray[4]};
+        var shopArray = [];
+        var shopFeatures = shopData.features;
         
-        //console.log(shopArray);
+        for (var i=0; i<shopFeatures.length; i++) {
+            var company = shopFeatures[i].properties["Company"]
+            shopArray.push(company);
+        }
+        //console.log(properties);
+        console.log(shopArray)
+        let swig = 0;
+        let fiiz = 0;
+        let sodalicious = 0;
+        let twistedSugar = 0;
+        let quenchIt = 0;
+        let other = 0;
+        for (var i=0; i<shopArray.length; i++){
+            if (shopArray[i] == 'Swig'){
+                swig += 1
+            } else if (shopArray[i] == 'Fiiz Drinks') {
+                fiiz += 1
+            } else if (shopArray[i] == 'Sodalicious'){
+                sodalicious += 1
+            } else if (shopArray[i] == 'Twisted Sugar'){
+                twistedSugar += 1
+            } else if (shopArray[i] == 'Quench It!'){
+                quenchIt += 1
+            } else {
+                other += 1
+            }
+        }
+        var total = swig + fiiz + sodalicious + twistedSugar + quenchIt;
+
+        var shopCount = {'Swig':swig,'Fiiz':fiiz,'Sodalicious':sodalicious,'Twisted Sugar':twistedSugar,'Quench It!':quenchIt}
+        
+        console.log(swig,fiiz, sodalicious, twistedSugar, quenchIt, other);
         var color = d3.scaleOrdinal()
-            .domain(shopData)
+            .domain(shopCount)
             .range(["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00"]);
         var pie = d3.pie()
             .value(function(d) {return d.value})
-        var data_ready = pie(d3.entries(shopData))
+        var data_ready = pie(d3.entries(shopCount))
         chartG.selectAll(".slices")
             .data(data_ready)
             .enter()
             .append("path")
             .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
-            .attr("fill",function(d){return(color(d.shopData.key))})
+            .attr("fill",function(d){return(color(d.key))})
             .style("stroke","black")
             .style("stroke-width","2px")
             .style("opacity",0.7)
