@@ -110,8 +110,138 @@
             "12 oz. Option": smallSize
         },{collapsed: false}).addTo(map);
         //allShops.addTo(map);
+
+        var countyArray = [];
+        var counties = data.features;
+
+        for (var i=0; i<counties.length; i++){
+            var county = counties[i].properties["county"];
+            countyArray.push(county)
+        };
+        console.log("countyArray: ",countyArray);
+
     };
     
+    function createCountyShopSymbols(data,map,selection){
+        var geojsonMarkerOptions = {
+            radius: 8,
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+        var allShops = L.geoJson(data, {
+            filter: function(feature){return feature.properties["county"] == selection},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var hotDrinks = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Hot_Chocolate"] == 'Y' && feature.properties["county"] == selection},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var frozenDrinks = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Frozen_Drinks"] == 'Y'&& feature.properties["county"] == selection},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var cookies = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Cookies"] == 'Y' && feature.properties["county"] == selection},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var kidsDrinks = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Kids_Drinks"] == 'Y' && feature.properties["county"] == selection},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var popcorn = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Popcorn"] == 'Y' && feature.properties["county"] == selection},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var smallSize = L.geoJson(data, {
+            filter: function(feature){return feature.properties["Smallest_Size"] == '12 oz.' && feature.properties["county"] == selection},
+            pointToLayer: function(feature,latlng){
+                geojsonMarkerOptions.fillColor = colorShops(feature,latlng);
+                return L.circleMarker(latlng,geojsonMarkerOptions);
+            },
+            onEachFeature: shopPopup
+        });
+        var allLayers = L.layerGroup([allShops,hotDrinks,frozenDrinks,cookies,kidsDrinks,popcorn,smallSize]).addTo(map);
+        
+        var layerControl = L.control.layers(null,{
+            "All Shops": allShops,
+            "Hot Drinks": hotDrinks,
+            "Frozen Drinks": frozenDrinks,
+            "Cookies": cookies,
+            "Special Kids Drinks": kidsDrinks,
+            "Popcorn": popcorn,
+            "12 oz. Option": smallSize
+        },{collapsed: false}).addTo(map);
+    }
+    function filterCounty(data,map){
+        $('#county-filter-row').append('<select id="select"></select>')
+        $('#select').append('<option class="title-option">Filter by County...</option>')
+        $('#select').append('<option id="Beaver County">Beaver County</option>')
+        $('#select').append('<option id="Box Elder County">Box Elder County</option>')
+        $('#select').append('<option id="Cache County">Cache County</option>')
+        $('#select').append('<option id="Carbon County">Carbon County</option>')
+        $('#select').append('<option id="Daggett County">Daggett County</option>')
+        $('#select').append('<option id="Davis County">Davis County</option>')
+        $('#select').append('<option id="Duchesne County">Duchesne County</option>')
+        $('#select').append('<option id="Emery County">Emery County</option>')
+        $('#select').append('<option id="Garfield County">Garfield County</option>')
+        $('#select').append('<option id="Grand County">Grand County</option>')
+        $('#select').append('<option id="Iron County">Iron County</option>')
+        $('#select').append('<option id="Juab County">Juab County</option>')
+        $('#select').append('<option id="Kane County">Kane County</option>')
+        $('#select').append('<option id="Millard County">Millard County</option>')
+        $('#select').append('<option id="Morgan County">Morgan County</option>')
+        $('#select').append('<option id="Piute County">Piute County</option>')
+        $('#select').append('<option id="Rich County">Rich County</option>')
+        $('#select').append('<option id="Salt Lake County">Salt Lake County</option>')
+        $('#select').append('<option id="San Juan County">San Juan County</option>')
+        $('#select').append('<option id="Sanpete County">Sanpete County</option>')
+        $('#select').append('<option id="Sevier County">Sevier County</option>')
+        $('#select').append('<option id="Summit County">Summit County</option>')
+        $('#select').append('<option id="Tooele County">Tooele County</option>')
+        $('#select').append('<option id="Uintah County">Uintah County</option>')
+        $('#select').append('<option id="Utah County">Utah County</option>')
+        $('#select').append('<option id="Wasatch County">Wasatch County</option>')
+        $('#select').append('<option id="Washington County">Washington County</option>')
+        $('#select').append('<option id="Wayne County">Wayne County</option>')
+        $('#select').append('<option id="Weber County">Weber County</option>')
+
+        $('#select').on('change',function(){
+            map.eachLayer(function(layer){
+                if (layer.feature){
+                    map.removeLayer(layer)
+                }
+            });
+            $('.leaflet-control-layers').remove();
+            var selection = this.value;
+            createCountyShopSymbols(data,map,selection)
+        })
+    }
     //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
     function addFilters(data,map){
         $('#filter-row').append('<p><input type="range" min="$1.50" max ="$2.50" id="price">Base Price</input>');  
@@ -172,6 +302,7 @@
                         return{fillColor: "blue"}
                     }
                 }).addTo(map);
+                
             }
         });
         //counties.addTo(map)
@@ -189,6 +320,7 @@
                 addCounty(map);
                 addReset(response,map);
                 chart(response);
+                filterCounty(response,map)
             }
         });
     };
@@ -257,9 +389,8 @@
         var shopCount = {'Swig':swig,'Fiiz':fiiz,'Sodalicious':sodalicious,'Twisted Sugar':twistedSugar,'Quench It!':quenchIt}
         
         console.log(swig,fiiz, sodalicious, twistedSugar, quenchIt, other);
-        var color = d3.scaleOrdinal()
-            .domain(["Swig","Fiiz","Sodalicious","Twisted Sugar","Quench It!"])
-            .range(["#e41a1c","#377eb8","#984ea3","#4daf4a","#ff7f00"]);
+        var color = d3.scaleOrdinal(["#e41a1c","#377eb8","#984ea3","#4daf4a","#ff7f00"])
+            
             //.domain(shopCount)
             //.range(["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00"]);
             //.range(d3.schemeSet2);
@@ -286,12 +417,15 @@
             .style("font-size",17);
 
         var legend = d3.legendColor()
-            .shapeWidth(30)
-            .cells(5)
-            .orient('horizontal')
+            .shape('circle')
+            .shapeRadius(10)
+            .shapePadding(10)
+            .orient('vertical')
             .scale(color)
+            .labels(["Swig","Fiiz","Sodalicious","Twisted Sugar","Quench It!"]);
         
-        chart.append('g')
+        chart
+            .append('g')
             .attr('class','pie-legend')
             .attr('transform','translate(20,20)')
             .call(legend)
