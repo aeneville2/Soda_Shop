@@ -15,6 +15,21 @@
         .attr("class","chartG")
         .attr("transform","translate(" + width/2 + "," + height/2 + ")");
 
+    var color = d3.scaleOrdinal(["#e41a1c","#377eb8","#984ea3","#4daf4a","#ff7f00"])
+
+    var legend = d3.legendColor()
+        .shape('circle')
+        .shapeRadius(4)
+        .shapePadding(10)
+        .orient('vertical')
+        .scale(color)
+        .labels(["Swig","Fiiz","Sodalicious","Twisted Sugar","Quench It!"]);
+    
+    var legendContainer = d3.select('#pie-chart-legend').append('svg')
+    var legendG = legendContainer.append('g')
+        .attr('class','pie-legend')
+        .attr('transform','translate(20,20)')
+
     function createMap(){
         var map = L.map('map').setView([39.3210,-111.0937],6);
 
@@ -31,7 +46,7 @@
     };
     function shopPopup(feature,layer){
         var popupContent = "<h3><b>" + feature.properties["Company"] + "</b></h3><p>" +feature.properties["given_address"] + "</p>";
-        layer.bindPopup(popupContent);
+        layer.bindTooltip(popupContent);
     };
     function colorShops(feature,latlng){
         var shop = feature.properties["Company"]
@@ -140,15 +155,17 @@
         };
 
         updateChart(shopArray);
+        
+        $('#legend-title-row').text("Distribution of Shop Company for Utah");
 
-        var countyArray = [];
+        /* var countyArray = [];
         var counties = data.features;
 
         for (var i=0; i<counties.length; i++){
             var county = counties[i].properties["county"];
             countyArray.push(county)
         };
-        console.log("countyArray: ",countyArray);
+        console.log("countyArray: ",countyArray); */
 
     };
     
@@ -309,8 +326,8 @@
 
         $('#reset').on('click',function(){
             removeCounties(map);
-            map.setView([39.3210,-111.0937]);
-            map.setZoom(6);
+            map.setView([39.3210,-111.0937],6);
+            //map.setZoom(6);
             map.eachLayer(function(layer){
                 if (layer.feature){
                     map.removeLayer(layer)
@@ -318,7 +335,9 @@
             });
             $('.leaflet-control-layers').remove();
             createShopSymbols(data,map);
-            $('#select').value = 'All Counties'
+
+            //https://www.codegrepper.com/code-examples/javascript/jquery+reset+select+to+first+option response from Beautiful Bug
+            $('#select').prop('selectedIndex',0);
         })
     };
 
@@ -339,14 +358,15 @@
                         return L.polygon(latlng);
                     },
                     style: function(feature){
-                        return{fillColor: "blue"}
+                        return{color:"black",fillOpacity:0,opacity:1}
+                    },
+                    onEachFeature: function(feature,layer){
+                        layer.bindTooltip(feature.properties["NAME"] + " COUNTY")
                     }
-                }).addTo(map);
+                }).addTo(map).bringToBack();
                 
             }
         });
-        //counties.addTo(map)
-        //$('#counties').on("input",function(){counties.addTo(map);})
     };
     
     function getData(map){
@@ -377,21 +397,11 @@
             }
         };
         updateChart(countyArray);
+        legendTitle(attribute);
         
     };
-
-    function noShops(){
-        d3.pie()
-            .value(100)
-        chartG.selectAll('.slices')
-            .data(100)
-            .enter()
-            .append('path')
-            .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
-            .attr("fill","#000")
-            .style("stroke","black")
-            .style("stroke-width","2px")
-            .style("opacity",1);
+    function legendTitle(attribute){
+        $('#legend-title-row').text("Distribution of Shop Company for " + attribute)
     }
     
      //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
@@ -422,7 +432,6 @@
         var shopCount = {'Swig':swig,'Fiiz':fiiz,'Sodalicious':sodalicious,'Twisted Sugar':twistedSugar,'Quench It!':quenchIt}
         
         console.log(swig,fiiz, sodalicious, twistedSugar, quenchIt, other);
-        var color = d3.scaleOrdinal(["#e41a1c","#377eb8","#984ea3","#4daf4a","#ff7f00"])
         var pie = d3.pie()
             .value(function(d) {return d.value})
         if (total == 0){
@@ -459,20 +468,7 @@
                 .style("text-anchor","middle")
                 .style("font-size",17);
         };
-
-        var legend = d3.legendColor()
-            .shape('circle')
-            .shapeRadius(4)
-            .shapePadding(10)
-            .orient('vertical')
-            .scale(color)
-            .labels(["Swig","Fiiz","Sodalicious","Twisted Sugar","Quench It!"]);
-        
-        var legendContainer = d3.select('#pie-chart-legend').append('svg')
-        legendContainer.append('g')
-            .attr('class','pie-legend')
-            .attr('transform','translate(20,20)')
-            .call(legend)
+        legendG.call(legend);
     }
     
    
