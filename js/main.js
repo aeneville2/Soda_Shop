@@ -1,5 +1,20 @@
 (function(){
-    
+    var width = 250
+        height = 250
+        margin = 40;
+
+    var radius = Math.min(width, height) / 2 - margin;
+
+    var chart = d3.select("#pie-chart")
+        .append("svg")
+        .attr("width",width)
+        .attr("height",height)
+        .attr("class","chart");
+    var chartG = d3.select(".chart")
+        .append("g")
+        .attr("class","chartG")
+        .attr("transform","translate(" + width/2 + "," + height/2 + ")");
+
     function createMap(){
         var map = L.map('map').setView([39.3210,-111.0937],6);
 
@@ -197,6 +212,8 @@
             "Popcorn": popcorn,
             "12 oz. Option": smallSize
         },{collapsed: false}).addTo(map);
+
+
     }
     function filterCounty(data,map){
         $('#county-filter-row').append('<select id="select"></select>')
@@ -239,7 +256,8 @@
             });
             $('.leaflet-control-layers').remove();
             var selection = this.value;
-            createCountyShopSymbols(data,map,selection)
+            createCountyShopSymbols(data,map,selection);
+            countyArray(data,selection);
         })
     }
     //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
@@ -319,48 +337,40 @@
                 addFilters(response,map);
                 addCounty(map);
                 addReset(response,map);
-                chart(response);
-                filterCounty(response,map)
+                filterCounty(response,map);
+                updateChart(response);
             }
         });
     };
-    
-    
-    //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
-    function chart(data){
-        var width = 250
-            height = 250
-            margin = 40
 
-        var radius = Math.min(width, height) / 2 - margin
-
-        var chart = d3.select("#pie-chart")
-            .append("svg")
-            .attr("width",width)
-            .attr("height",height)
-            .attr("class","chart");
-        var chartG = d3.select(".chart")
-            .append("g")
-            .attr("class","chartG")
-            .attr("transform","translate(" + width/2 + "," + height/2 + ")");
+    function countyArray(data,attribute){
+        var countyArray = [];
+        var countyFeatures = data.features;
+        console.log("countyFeatures",countyFeatures)
+        for (var i=0; i<countyFeatures.length; i++){
+            var county = countyFeatures[i]
+            if(county.properties["county"] == attribute){
+                countyArray.push(county)
+            }
+        };
+        updateChart(countyArray);
+        console.log("countyArray function:",countyArray[0]["Company"])
+    };
+    
+     //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
+    function updateChart(data){
         var shopData = data;
         console.log(shopData)
-        //console.log(shopData["Company"].count())
-        /*var shopArray = [];
-        for (var i=0; i<shopData.length; i++){
-            var object = shopData[i]
-            var val = object["Company"];
-            console.log(shopData[i]["Company"])
-            shopArray.push(val);
-        }*/
+       
 
         var shopArray = [];
         var shopFeatures = shopData.features;
+        console.log("shopFeatures",shopFeatures)
         
         for (var i=0; i<shopFeatures.length; i++) {
             var company = shopFeatures[i].properties["Company"]
             shopArray.push(company);
-        }
+        };
         //console.log(properties);
         console.log(shopArray)
         let swig = 0;
@@ -390,10 +400,6 @@
         
         console.log(swig,fiiz, sodalicious, twistedSugar, quenchIt, other);
         var color = d3.scaleOrdinal(["#e41a1c","#377eb8","#984ea3","#4daf4a","#ff7f00"])
-            
-            //.domain(shopCount)
-            //.range(["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00"]);
-            //.range(d3.schemeSet2);
         var pie = d3.pie()
             .value(function(d) {return d.value})
         var data_ready = pie(d3.entries(shopCount))
@@ -430,6 +436,9 @@
             .attr('transform','translate(20,20)')
             .call(legend)
     }
+    
+   
+    
     $(document).ready(createMap);
 }) ();
 
