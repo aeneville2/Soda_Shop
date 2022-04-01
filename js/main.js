@@ -126,6 +126,21 @@
         },{collapsed: false}).addTo(map);
         //allShops.addTo(map);
 
+        var shopData = data;
+        console.log(shopData)
+       
+
+        var shopArray = [];
+        var shopFeatures = shopData.features;
+        console.log("shopFeatures",shopFeatures)
+        
+        for (var i=0; i<shopFeatures.length; i++) {
+            var company = shopFeatures[i].properties["Company"]
+            shopArray.push(company);
+        };
+
+        updateChart(shopArray);
+
         var countyArray = [];
         var counties = data.features;
 
@@ -217,7 +232,7 @@
     }
     function filterCounty(data,map){
         $('#county-filter-row').append('<select id="select"></select>')
-        $('#select').append('<option class="title-option">Filter by County...</option>')
+        $('#select').append('<option class="All Counties">All Counties</option>')
         $('#select').append('<option id="Beaver County">Beaver County</option>')
         $('#select').append('<option id="Box Elder County">Box Elder County</option>')
         $('#select').append('<option id="Cache County">Cache County</option>')
@@ -256,8 +271,14 @@
             });
             $('.leaflet-control-layers').remove();
             var selection = this.value;
-            createCountyShopSymbols(data,map,selection);
-            countyArray(data,selection);
+            if (selection == 'All Counties'){
+                createShopSymbols(data,map)
+            } else {
+                createCountyShopSymbols(data,map,selection);
+                countyArray(data,selection);
+            }
+            //createCountyShopSymbols(data,map,selection);
+            //countyArray(data,selection);
         })
     }
     //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
@@ -297,6 +318,7 @@
             });
             $('.leaflet-control-layers').remove();
             createShopSymbols(data,map);
+            $('#select').value = 'All Counties'
         })
     };
 
@@ -338,7 +360,7 @@
                 addCounty(map);
                 addReset(response,map);
                 filterCounty(response,map);
-                updateChart(response);
+                //updateChart(response);
             }
         });
     };
@@ -350,29 +372,30 @@
         for (var i=0; i<countyFeatures.length; i++){
             var county = countyFeatures[i]
             if(county.properties["county"] == attribute){
-                countyArray.push(county)
+                var company = county.properties["Company"]
+                countyArray.push(company)
             }
         };
         updateChart(countyArray);
-        console.log("countyArray function:",countyArray[0]["Company"])
+        
     };
+
+    function noShops(){
+        d3.pie()
+            .value(100)
+        chartG.selectAll('.slices')
+            .data(100)
+            .enter()
+            .append('path')
+            .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
+            .attr("fill","#000")
+            .style("stroke","black")
+            .style("stroke-width","2px")
+            .style("opacity",1);
+    }
     
      //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
-    function updateChart(data){
-        var shopData = data;
-        console.log(shopData)
-       
-
-        var shopArray = [];
-        var shopFeatures = shopData.features;
-        console.log("shopFeatures",shopFeatures)
-        
-        for (var i=0; i<shopFeatures.length; i++) {
-            var company = shopFeatures[i].properties["Company"]
-            shopArray.push(company);
-        };
-        //console.log(properties);
-        console.log(shopArray)
+    function updateChart(shopArray){
         let swig = 0;
         let fiiz = 0;
         let sodalicious = 0;
@@ -402,25 +425,40 @@
         var color = d3.scaleOrdinal(["#e41a1c","#377eb8","#984ea3","#4daf4a","#ff7f00"])
         var pie = d3.pie()
             .value(function(d) {return d.value})
-        var data_ready = pie(d3.entries(shopCount))
-        chartG.selectAll(".slices")
-            .data(data_ready)
-            .enter()
-            .append("path")
-            .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
-            .attr("fill",function(d,i){return(color(i))})
-            .style("stroke","black")
-            .style("stroke-width","2px")
-            .style("opacity",0.7);
+        if (total == 0){
+            var emptyArray = {'None':100}
+            var data_ready = pie(d3.entries(emptyArray))
+            chartG.selectAll('.slices')
+                .data(data_ready)
+                .enter()
+                .append('path')
+                .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
+                .attr("fill","#000")
+                .style("stroke","black")
+                .style("stroke-width","2px")
+                .style("opacity",1);
+        }
+        else {
+            var data_ready = pie(d3.entries(shopCount))
+            chartG.selectAll(".slices")
+                .data(data_ready)
+                .enter()
+                .append("path")
+                .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
+                .attr("fill",function(d,i){return(color(i))})
+                .style("stroke","black")
+                .style("stroke-width","2px")
+                .style("opacity",1);
 
-        chartG.selectAll(".slices")
-            .data(data_ready)
-            .enter()
-            .append("text")
-            .text(function(d) {return d.value + "%"})
-            .attr("transform",function(d) {return "translate(" + d3.arc().outerRadius(radius).innerRadius(radius-80).centroid(d) + ")";})
-            .style("text-anchor","middle")
-            .style("font-size",17);
+            chartG.selectAll(".slices")
+                .data(data_ready)
+                .enter()
+                .append("text")
+                .text(function(d) {return Math.round((d.value/total)*100) + "%"})
+                .attr("transform",function(d) {return "translate(" + d3.arc().outerRadius(radius).innerRadius(radius-80).centroid(d) + ")";})
+                .style("text-anchor","middle")
+                .style("font-size",17);
+        };
 
         var legend = d3.legendColor()
             .shape('circle')
