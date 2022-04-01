@@ -1,11 +1,11 @@
 (function(){
     var width = 250
         height = 250
-        margin = 40;
+        margin = 20;
 
     var radius = Math.min(width, height) / 2 - margin;
 
-    var chart = d3.select("#pie-chart")
+    var chart = d3.select("#pie-chart-row")
         .append("svg")
         .attr("width",width)
         .attr("height",height)
@@ -462,14 +462,14 @@
 
         var legend = d3.legendColor()
             .shape('circle')
-            .shapeRadius(10)
+            .shapeRadius(4)
             .shapePadding(10)
             .orient('vertical')
             .scale(color)
             .labels(["Swig","Fiiz","Sodalicious","Twisted Sugar","Quench It!"]);
         
-        chart
-            .append('g')
+        var legendContainer = d3.select('#pie-chart-legend').append('svg')
+        legendContainer.append('g')
             .attr('class','pie-legend')
             .attr('transform','translate(20,20)')
             .call(legend)
