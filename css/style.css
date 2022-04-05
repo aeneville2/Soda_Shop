@@ -1,9 +1,13 @@
+
+
 #header{
 	font-size: 20pt;
 	text-align: center;
 	width: 100%;
 	height: auto;
 	font-weight: bold;
+	/*font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;*/
+	font-family: 'Lobster', cursive;
 }
 
 #map {

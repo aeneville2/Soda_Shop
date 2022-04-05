@@ -44,9 +44,24 @@
         //addFilters();
         
     };
+    function shopWebsite(attribute){
+        if (attribute == 'Swig'){
+            return 'https://www.swignsweets.com/'
+        } else if (attribute == 'Fiiz Drinks'){
+            return 'https://fiizdrinks.com/'
+        } else if (attribute == 'Sodalicious'){
+            return 'https://www.mysodalicious.com/'
+        } else if (attribute == 'Twisted Sugar'){
+            return 'https://twistedsugar.com/'
+        } else if (attribute == 'Quench It!'){
+            return 'https://quenchitsoda.com/'
+        }
+    }
     function shopPopup(feature,layer){
-        var popupContent = "<h3><b>" + feature.properties["Company"] + "</b></h3><p>" +feature.properties["given_address"] + "</p>";
-        layer.bindTooltip(popupContent);
+        var attribute = feature.properties["Company"]
+        var website = shopWebsite(attribute)
+        var popupContent = "<h3><b>" + attribute + "</b></h3><p>" +feature.properties["given_address"] + "</p><p><a href=" + website + ">Website</a></p>";
+        layer.bindPopup(popupContent);
     };
     function colorShops(feature,latlng){
         var shop = feature.properties["Company"]
