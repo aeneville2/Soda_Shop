@@ -1,5 +1,5 @@
 html {
-	font-family: 'Lobster',cursive; 
+	font-family: 'Open Sans',sans-serif; 
 }
 
 #header{
@@ -8,30 +8,29 @@ html {
 	width: 100%;
 	height: auto;
 	font-weight: bold;
-	/*font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;*/
 	font-family: 'Lobster', cursive;
 }
 
 #map {
 	height: 600px;
 	display: inline-block;
-	font-family: 'Lobster',cursive;
+	font-family: 'Open Sans',sans-serif;
 }
 
 #panel {
 	height: 400px;
 	float: right;
-	font-size: 12pt;
+	font-size: 10pt;
 }
 
 #select {
-	font-family: 'Lobster',cursive;
-}
+	font-family: 'Open Sans',sans-serif;
+} 
 
 #reset{
 	margin: 5px;
 	padding: 5px;
-	font-family: 'Lobster',cursive;
+	font-family: 'Open Sans',sans-serif;
 }
 
 .container{
@@ -42,4 +41,5 @@ html {
 	font-size: 16pt;
 	text-align: center;
 	font-weight: bold;
+	font-family: 'Open-Sans',sans-serif;
 }
