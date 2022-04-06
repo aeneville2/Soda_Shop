@@ -354,15 +354,15 @@
         });
     };
 
-    //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
+    /* //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
     function addFilters(data,map){
         $('#filter-row').append('<p><input type="range" min="$1.50" max ="$2.50" id="price">Base Price</input>');  
-    };
+    }; */
 
     //add an option for an overlay layer displaying county boundaries
     function addCounty(map){
         //add a checkbox for counties to the appropriate div
-        $('#county-row').append('<input type="checkbox" id="counties">Counties</input>');
+        $('#county-row').append('<input type="checkbox" id="counties">Show Counties</input>');
 
         //when checkbox is checked then add the county overlay to the map
         $("#counties").on('click',function(){
@@ -390,7 +390,6 @@
         $('#reset').on('click',function(){
             removeCounties(map);
             map.setView([39.3210,-111.0937],6);
-            //map.setZoom(6);
             map.eachLayer(function(layer){
                 if (layer.feature){
                     map.removeLayer(layer)
@@ -496,6 +495,8 @@
                 .data(data_ready)
                 .enter()
                 .append('path')
+                //.transition()
+                //.delay(500)
                 .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
                 .attr("fill","#000")
                 .style("stroke","black")
@@ -509,6 +510,8 @@
                 .data(data_ready)
                 .enter()
                 .append("path")
+                //.transition()
+                //.delay(500)
                 .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
                 .attr("fill",function(d,i){return(color(i))})
                 .style("stroke","black")
@@ -519,6 +522,8 @@
                 .data(data_ready)
                 .enter()
                 .append("text")
+                //.transition()
+                //.delay(500)
                 .text(function(d) {return Math.round((d.value/total)*100) + "%"})
                 .attr("transform",function(d) {return "translate(" + d3.arc().outerRadius(radius).innerRadius(radius-80).centroid(d) + ")";})
                 .style("text-anchor","middle")
@@ -536,7 +541,7 @@
             dataType: "json",
             success: function(response){
                 createShopSymbols(response,map);
-                addFilters(response,map);
+                //addFilters(response,map);
                 addCounty(map);
                 addReset(response,map);
                 filterCounty(response,map);

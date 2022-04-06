@@ -1,14 +1,26 @@
 html {
-	font-family: 'Open Sans',sans-serif; 
+	font-family: 'Open Sans',sans-serif;
 }
 
 #header{
-	font-size: 20pt;
+	font-size: 36pt;
 	text-align: center;
-	width: 100%;
-	height: auto;
+	/* width: 100%;
+	height: auto; */
 	font-weight: bold;
 	font-family: 'Lobster', cursive;
+}
+
+#title-span{
+	background-color: rgba(250,250,250,0.9);
+	padding:5px;
+}
+
+#intro-text{
+	background-color: rgba(250,250,250,0.8);
+	margin-bottom: 20px;
+	text-align: center;
+	font-size: 16px;
 }
 
 #map {
@@ -18,9 +30,9 @@ html {
 }
 
 #panel {
-	height: 400px;
 	float: right;
 	font-size: 10pt;
+	background-color: white;
 }
 
 #select {
@@ -28,8 +40,9 @@ html {
 } 
 
 #reset{
-	margin: 5px;
+	margin-left: 40%;
 	padding: 5px;
+	width: 20%;
 	font-family: 'Open Sans',sans-serif;
 }
 
@@ -42,4 +55,29 @@ html {
 	text-align: center;
 	font-weight: bold;
 	font-family: 'Open-Sans',sans-serif;
+	width: 100%;
+}
+
+#pie-chart-row{
+	text-align: center;
+	width: 100%;
+	margin-left:10%;
+}
+
+#county-filter-row{
+	margin: 20px;
+}
+
+#county-row{
+	margin-left: 10px;
+}
+
+#counties{
+	height: 15px;
+	width: 15px;
+	margin-left: 10px;
+}
+
+#reset-row{
+	margin-top: 20px;
 }
