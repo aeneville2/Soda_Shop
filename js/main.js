@@ -26,7 +26,7 @@
     //create legend for the pie chart/map
     var legend = d3.legendColor()
         .shape('circle')
-        .shapeRadius(4)
+        .shapeRadius(8)
         .shapePadding(5)
         .orient('vertical')
         .scale(color)
@@ -70,7 +70,7 @@
     function shopPopup(feature,layer){
         var attribute = feature.properties["Company"];
         var website = shopWebsite(attribute);
-        var popupContent = "<h3><b>" + attribute + "</b></h3><p>" +feature.properties["given_address"] + "</p><p><a href=" + website + ">Website</a></p>";
+        var popupContent = "<div style='line-height:2px;text-align:center;'><h3><b>" + attribute + "</b></h3><p>" +feature.properties["given_address"] + "</p><p><a href=" + website + ">Website</a></p></div>";
         layer.bindPopup(popupContent);
     };
 

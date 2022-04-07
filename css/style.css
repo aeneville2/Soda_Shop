@@ -2,6 +2,10 @@ html {
 	font-family: 'Open Sans',sans-serif;
 }
 
+h3 {
+	font-family: 'Lobster',cursive;
+}
+
 #header{
 	font-size: 36pt;
 	text-align: center;
@@ -62,6 +66,11 @@ html {
 	text-align: center;
 	width: 100%;
 	margin-left:10%;
+}
+
+.pie-legend{
+	font-family: 'Lobster',cursive;
+	font-size:14pt;
 }
 
 #county-filter-row{
