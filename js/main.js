@@ -198,7 +198,7 @@
         updateChart(shopArray);
         
         //update the title of the pie chart
-        $('#legend-title-row').text("Distribution of Shop Company for Utah");
+        $('#legend-title-row').text("Distribution of Soda Shop Companies in Utah");
     };
     
     //function to show shops based on county
@@ -450,7 +450,7 @@
 
     //function to update the legend title based on which county is selected
     function legendTitle(attribute){
-        $('#legend-title-row').text("Distribution of Shop Company for " + attribute);
+        $('#legend-title-row').text("Distribution of Soda Shop Companies in " + attribute);
     };
     
         //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
