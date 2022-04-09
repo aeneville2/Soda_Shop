@@ -66,11 +66,27 @@
         }
     };
 
+    //function to return the shop logo based on company
+    function shopLogo(attribute){
+        if (attribute == 'Swig'){
+            return 'img/Swig-Icon.png'
+        } else if (attribute == 'Fiiz Drinks'){
+            return 'img/cropped-logo-fiiz-july-2020.png'
+        } else if (attribute == 'Sodalicious'){
+            return 'img/Sodalicious.png'
+        } else if (attribute == 'Twisted Sugar'){
+            return 'img/twisted-sugar-logo.png'
+        } else if (attribute == 'Quench It!'){
+            return 'img/quench-it-soda.x1.png'
+        }
+    }
+
     //function to create the popup for the shops on the map
     function shopPopup(feature,layer){
         var attribute = feature.properties["Company"];
         var website = shopWebsite(attribute);
-        var popupContent = "<div style='line-height:2px;text-align:center;'><h3><b>" + attribute + "</b></h3><p>" +feature.properties["given_address"] + "</p><p><a href=" + website + ">Website</a></p></div>";
+        var popupContent = "<div style='text-align: center'><img src='" + shopLogo(attribute) + "' height='50px'></div>"
+        popupContent += "<div style='line-height:2px;text-align:center;'><p>" +feature.properties["given_address"] + "</p><p><a href=" + website + ">Website</a></p></div>";
         layer.bindPopup(popupContent);
     };
 
