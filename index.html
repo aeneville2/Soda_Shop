@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
-		<title>Utah Soda Shops</title>
+		<title>Soda Shops in Utah</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,56 +17,35 @@
 		<div class="container" id="title" style="background-image: url('img/soda.jpg');background-size: 50px;">
 			<div class="row" id="header">
 				<div class="col-12">
-						<h3><span id="title-span">Utah Soda Shops</span></h3>
+						<h3><span id="title-span">Soda Shops in Utah</span></h3>
 				</div>
 			</div>
 			<div class="row" id="logo-row">
-				<div class="col-12" style="text-align: center"><img src="img/Logos.png" height="100px"></div>
-				<!-- <div class="col-2" style="background-image: url('img/Sodalicious_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/cropped-logo-fiiz-july-2020_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/twisted-sugar-logo_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/Swig-Icon_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/quench-it-soda.x1_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div> -->
+				<div class="col-md-12 col-xs-12" style="text-align: center"><img src="img/Logos.png" height="75px"></div>
 			</div>
-			<!-- <div class="row" id="logo-row">
-				<div class="col-md-1 col-xs-0"></div>
-				<div class="col-md-2 col-xs-12" style="background-image: url('img/Swig-Icon_resize.png');background-size: 60px;height:100px;background-repeat: no-repeat;"></div>
-				<div class="col-md-2 col-xs-12" style="background-image: url('img/cropped-logo-fiiz-july-2020_resize.png');background-size: 60px;height:100px;background-repeat: no-repeat;"></div>
-				<div class="col-md-2 col-xs-12" style="background-image: url('img/Sodalicious_resize.png');background-size: 100px;height:100px;background-repeat: no-repeat;"></div>
-				<div class="col-md-2 col-xs-12" style="background-image: url('img/twisted-sugar-logo_resize.png');background-size: 100px;height:100px;background-repeat: no-repeat;"></div>
-				<div class="col-md-2 col-xs-12" style="background-image: url('img/quench-it-soda.x1_resize.png');background-size: 100px;height:100px;background-repeat: no-repeat;"></div>
-				<div class="col-md-1 col-xs-0"></div>
-			</div> -->
 		</div>
 		<div class="container">
 			<div class="row" id="intro">
 				<div class="col-12" id="intro-text"><p>One of the new fads in Utah is the soda shop: a place that sells fun-flavored sodas.
 					Five main soda shop companies compete for customers (Swig, Fiiz Drinks, Sodalicious, Twisted Sugar, and Quench It!). Many smaller one-off shops have also jumped on the soda shop bandwagon.
-					The soda shop concept is quite basic and the five main companies all sell popular sodas (i.e. Dr. Pepper, Coke, Pepsi, Mountain Dew, Root Beer), have diet options, offer a large selection of flavors to add in the sodas, and have 44oz. as the largest size.
+					The soda shop concept is quite basic and the five main companies all sell popular sodas (i.e. Dr. Pepper, Coke, Pepsi, Mountain Dew, Root Beer), have diet options, offer a large selection of flavors to add in the sodas, deliver with Door Dash, and have 44oz. as the largest size.
 					If they all are quite similar, why have five main companies and which one has captured the largest share of customers statewide and by county?
 					This web app seeks to answer those questions and compares the five main soda shop companies: where they are located across the state, what menu differences exist between the shops, and which is most prominent statewide and by county.
 				</p></div>
 			</div>
-			<!-- <div class="row" id="logo-row">
-				<div class="col-12" style="text-align: center"><img src="img/Logos.png" height="100px"></div>
-				<div class="col-2" style="background-image: url('img/Sodalicious_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/cropped-logo-fiiz-july-2020_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/twisted-sugar-logo_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/Swig-Icon_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div>
-				<div class="col-2" style="background-image: url('img/quench-it-soda.x1_resize.png');background-size: contain;background-repeat: no-repeat;height:50px;"></div> 
-			</div> -->
 		</div>
 		<div class="container">
 			<div class="row">
-				<div class="col-md-9 col-xs-12" id="map"></div>
-				<div class="col-md-3 col-xs-12" id="panel">
-					<div class="row" id="legend-title-row"></div>
-					<div class="row" id="pie-chart-row"></div>
-					<div class="row" id="pie-chart-legend"></div>
-					<div class="row" id="county-filter-row"></div>
-					<!-- <div class="row" id="filter-row"></div> -->
-					<div class="row" id="county-row"></div>
-					<div class="row" id="reset-row"></div>
+				<div class="col-md-8 col-xs-12" id="map"></div>
+				<div class="col-md-4 col-xs-12" id="panel">
+					<div style="text-align:center">
+						<div class="row" id="legend-title-row"></div>
+						<div class="row" id="pie-chart-row"></div>
+						<div class="row" id="pie-chart-legend"></div>
+						<div class="row" id="county-filter-row"></div>
+						<div class="row" id="county-row"></div>
+						<div class="row" id="reset-row"></div>
+					</div>
 				</div>
 			</div>
 		</div>

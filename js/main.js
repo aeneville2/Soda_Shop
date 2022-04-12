@@ -3,7 +3,7 @@
 //wrap in function to bring to local scope
 (function(){
     //define width, height, margin, and radius variables for the chart
-    var width = 250
+    var width = 0.25*window.innerWidth
         height = 250
         margin = 20;
 
@@ -370,15 +370,10 @@
         });
     };
 
-    /* //used cmrRose response from https://gis.stackexchange.com/questions/283070/filter-geojson-by-attribute-in-leaflet-using-a-button for help with filtering
-    function addFilters(data,map){
-        $('#filter-row').append('<p><input type="range" min="$1.50" max ="$2.50" id="price">Base Price</input>');  
-    }; */
-
     //add an option for an overlay layer displaying county boundaries
     function addCounty(map){
         //add a checkbox for counties to the appropriate div
-        $('#county-row').append('<input type="checkbox" id="counties">Show Counties</input>');
+        $('#county-row').append('<input type="checkbox" id="counties">Show County Boundaries on Map</input>');
 
         //when checkbox is checked then add the county overlay to the map
         $("#counties").on('click',function(){
@@ -416,13 +411,14 @@
 
             //https://www.codegrepper.com/code-examples/javascript/jquery+reset+select+to+first+option response from Beautiful Bug
             $('#select').prop('selectedIndex',0);
+            $('#price').prop('value',2.50)
         })
     };
 
     //function to remove the county overlay layer from the map
     function removeCounties(map){
         map.eachLayer(function(layer){
-            if (layer.feature && layer.options.fillColor == "blue"){
+            if (layer.feature && layer.options.fillOpacity == 0){
                 map.removeLayer(layer)
             }
         })
@@ -561,6 +557,7 @@
                 addCounty(map);
                 addReset(response,map);
                 filterCounty(response,map);
+                addFilters(response,map);
             }
         });
     };
