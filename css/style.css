@@ -24,7 +24,7 @@ h3 {
 
 #intro-text{
 	background-color: rgba(250,250,250,0.8);
-	margin-bottom: 20px;
+	/* margin-bottom: 20px; */
 	font-size: 16px;
 }
 
@@ -42,6 +42,19 @@ h3 {
 
 .hyperlink:hover{
 	color: blue;
+}
+
+.legend-container{
+	width:100%;
+	height: auto;
+	display: inline-block;
+	text-align: center;
+}
+
+.pie-legend{
+	font-family: 'Lobster',cursive;
+	font-size:14pt;
+	width: 100%;
 }
 
 #map {
@@ -79,17 +92,10 @@ h3 {
 	display: inline-block;
 }
 
-#pie-chart-legend{
-	border-bottom: 2px solid black;
-}
-
-.pie-legend{
-	font-family: 'Lobster',cursive;
-	font-size:14pt;
-}
-
 #county-filter-row{
-	margin: 20px;
+	border-top: 2px solid black;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 #county-filter-row p{
@@ -99,6 +105,7 @@ h3 {
 
 #county-row{
 	margin-left: 10px;
+	margin-top: 5px;
 }
 
 #counties{

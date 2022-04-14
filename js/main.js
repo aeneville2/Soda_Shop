@@ -27,13 +27,13 @@
     var legend = d3.legendColor()
         .shape('circle')
         .shapeRadius(8)
-        .shapePadding(5)
-        .orient('vertical')
+        .shapePadding(100)
+        .orient('horizontal')
         .scale(color)
-        .labels(["Swig","Fiiz","Sodalicious","Twisted Sugar","Quench It!"]);
+        .labels(["Swig","Fiiz Drinks","Sodalicious","Twisted Sugar","Quench It!"]);
     
     //create a container for the legend
-    var legendContainer = d3.select('#pie-chart-legend').append('svg')
+    var legendContainer = d3.select('#pie-chart-legend').append('svg').attr("class","legend-container")
     var legendG = legendContainer.append('g')
         .attr('class','pie-legend')
         .attr('transform','translate(20,20)');
@@ -54,30 +54,30 @@
     //function to add shop websites conditional on shop type
     function shopWebsite(attribute){
         if (attribute == 'Swig'){
-            return 'https://www.swignsweets.com/'
+            return 'https://www.swignsweets.com/';
         } else if (attribute == 'Fiiz Drinks'){
-            return 'https://fiizdrinks.com/'
+            return 'https://fiizdrinks.com/';
         } else if (attribute == 'Sodalicious'){
-            return 'https://www.mysodalicious.com/'
+            return 'https://www.mysodalicious.com/';
         } else if (attribute == 'Twisted Sugar'){
-            return 'https://twistedsugar.com/'
+            return 'https://twistedsugar.com/';
         } else if (attribute == 'Quench It!'){
-            return 'https://quenchitsoda.com/'
+            return 'https://quenchitsoda.com/';
         }
     };
 
     //function to return the shop logo based on company
     function shopLogo(attribute){
         if (attribute == 'Swig'){
-            return 'img/Swig-Icon.png'
+            return 'img/Swig-Icon.png';
         } else if (attribute == 'Fiiz Drinks'){
-            return 'img/cropped-logo-fiiz-july-2020.png'
+            return 'img/cropped-logo-fiiz-july-2020.png';
         } else if (attribute == 'Sodalicious'){
-            return 'img/Sodalicious.png'
+            return 'img/Sodalicious.png';
         } else if (attribute == 'Twisted Sugar'){
-            return 'img/twisted-sugar-logo.png'
+            return 'img/twisted-sugar-logo.png';
         } else if (attribute == 'Quench It!'){
-            return 'img/quench-it-soda.x1.png'
+            return 'img/quench-it-soda.x1.png';
         }
     }
 
@@ -85,26 +85,26 @@
     function shopPopup(feature,layer){
         var attribute = feature.properties["Company"];
         var website = shopWebsite(attribute);
-        var popupContent = "<div style='text-align: center'><img src='" + shopLogo(attribute) + "' height='50px'></div>"
+        var popupContent = "<div style='text-align: center'><img src='" + shopLogo(attribute) + "' height='50px'></div>";
         popupContent += "<div style='line-height:2px;text-align:center;'><p>" +feature.properties["given_address"] + "</p><p><a href=" + website + ">Website</a></p></div>";
         layer.bindPopup(popupContent);
     };
 
     //function to color the shop symbols on the map categorically based on shop type
     function colorShops(feature,latlng){
-        var shop = feature.properties["Company"]
+        var shop = feature.properties["Company"];
         if (shop === "Swig"){
-            return "#e41a1c"
+            return "#e41a1c";
         } else if (shop === "Fiiz Drinks"){
-            return "#377eb8"
+            return "#377eb8";
         } else if (shop === "Sodalicious"){
-            return "#984ea3"
+            return "#984ea3";
         } else if (shop === "Twisted Sugar"){
-            return "#4daf4a"
+            return "#4daf4a";
         } else if (shop === "Quench It!"){
-            return "#ff7f00"
+            return "#ff7f00";
         } else {
-            return "black"
+            return "black";
         }
     };
 
@@ -353,7 +353,7 @@
             //on a change, remove all layers from the map
             map.eachLayer(function(layer){
                 if (layer.feature){
-                    map.removeLayer(layer)
+                    map.removeLayer(layer);
                 }
             });
             //remove the control widget from the map
@@ -362,7 +362,7 @@
             //create the appropriate symbols and update the pie chart based on what is selected
             var selection = this.value;
             if (selection == 'All Counties'){
-                createShopSymbols(data,map)
+                createShopSymbols(data,map);
             } else {
                 createCountyShopSymbols(data,map,selection);
                 countyArray(data,selection);
@@ -393,7 +393,7 @@
     //function to add a reset button to reset the map and all interactives to original state
     function addReset(data,map){
         //add the reset button to the appropriate div
-        $('#reset-row').append('<button id="reset"><span id="reset-text">Reset</span></button>')
+        $('#reset-row').append('<button id="reset"><span id="reset-text">Reset</span></button>');
 
         /*when reset button is clicked then remove county layers, reset the map to original extent and zoom,
         remove all layers and the layer control widget from the map, add in the original layer and layer control,
@@ -403,7 +403,7 @@
             map.setView([39.3210,-111.0937],6);
             map.eachLayer(function(layer){
                 if (layer.feature){
-                    map.removeLayer(layer)
+                    map.removeLayer(layer);
                 }
             });
             $('.leaflet-control-layers').remove();
@@ -411,7 +411,6 @@
 
             //https://www.codegrepper.com/code-examples/javascript/jquery+reset+select+to+first+option response from Beautiful Bug
             $('#select').prop('selectedIndex',0);
-            $('#price').prop('value',2.50)
         })
     };
 
@@ -419,14 +418,14 @@
     function removeCounties(map){
         map.eachLayer(function(layer){
             if (layer.feature && layer.options.fillOpacity == 0){
-                map.removeLayer(layer)
+                map.removeLayer(layer);
             }
         })
     };
 
     //function to add the county overlay layer to the map behind the shops with appropriate style and tooltip
     function createCounties(map){
-        var counties = $.ajax("data/Utah_County_Boundaries.geojson", {
+        $.ajax("data/Utah_County_Boundaries.geojson", {
             dataType: "json",
             success: function(response){
                 L.geoJson(response, {
@@ -434,10 +433,10 @@
                         return L.polygon(latlng);
                     },
                     style: function(feature){
-                        return{color:"black",fillOpacity:0,opacity:1}
+                        return{color:"black",fillOpacity:0,opacity:1};
                     },
                     onEachFeature: function(feature,layer){
-                        layer.bindTooltip(feature.properties["NAME"] + " COUNTY")
+                        layer.bindTooltip(feature.properties["NAME"] + " COUNTY");
                     }
                 }).addTo(map).bringToBack();    
             }
@@ -448,12 +447,11 @@
     function countyArray(data,attribute){
         var countyArray = [];
         var countyFeatures = data.features;
-        console.log("countyFeatures",countyFeatures)
         for (var i=0; i<countyFeatures.length; i++){
             var county = countyFeatures[i]
             if(county.properties["county"] == attribute){
-                var company = county.properties["Company"]
-                countyArray.push(company)
+                var company = county.properties["Company"];
+                countyArray.push(company);
             }
         };
         updateChart(countyArray);
@@ -489,11 +487,11 @@
             } else {
                 other += 1
             }
-        }
+        };
         var total = swig + fiiz + sodalicious + twistedSugar + quenchIt;
 
         //create dictionary of each shop type and count
-        var shopCount = {'Swig':swig,'Fiiz':fiiz,'Sodalicious':sodalicious,'Twisted Sugar':twistedSugar,'Quench It!':quenchIt}
+        var shopCount = {'Swig':swig,'Fiiz Drinks':fiiz,'Sodalicious':sodalicious,'Twisted Sugar':twistedSugar,'Quench It!':quenchIt};
         
         //variable to create the pie chart
         var pie = d3.pie()
@@ -501,14 +499,12 @@
         
         //if the array has no features (county has no shops) then have the pie chart draw solid black
         if (total == 0){
-            var emptyArray = {'None':100}
-            var data_ready = pie(d3.entries(emptyArray))
+            var emptyArray = {'None':100};
+            var data_ready = pie(d3.entries(emptyArray));
             chartG.selectAll('.slices')
                 .data(data_ready)
                 .enter()
                 .append('path')
-                //.transition()
-                //.delay(500)
                 .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
                 .attr("fill","#000")
                 .style("stroke","black")
@@ -517,13 +513,11 @@
         }
         //otherwise have the pie chart draw according to proportion of each shop type with labels to show percentages
         else {
-            var data_ready = pie(d3.entries(shopCount))
+            var data_ready = pie(d3.entries(shopCount));
             chartG.selectAll(".slices")
                 .data(data_ready)
                 .enter()
                 .append("path")
-                //.transition()
-                //.delay(500)
                 .attr("d",d3.arc().innerRadius(0).outerRadius(radius))
                 .attr("fill",function(d,i){return(color(i))})
                 .style("stroke","black")
@@ -534,8 +528,6 @@
                 .data(data_ready)
                 .enter()
                 .append("text")
-                //.transition()
-                //.delay(500)
                 .text(function(d) {return Math.round((d.value/total)*100) + "%"})
                 .attr("transform",function(d) {return "translate(" + d3.arc().outerRadius(radius).innerRadius(radius-80).centroid(d) + ")";})
                 .style("text-anchor","middle")
@@ -557,7 +549,7 @@
                 addCounty(map);
                 addReset(response,map);
                 filterCounty(response,map);
-                addFilters(response,map);
+                //addFilters(response,map);
             }
         });
     };
