@@ -115,7 +115,7 @@
         var geojsonMarkerOptions = {
             radius: 8,
             color: "#000",
-            weight: 1,
+            weight: 0.5,
             opacity: 1,
             fillOpacity: 0.8
         };
@@ -195,11 +195,11 @@
         //add the layer group to the map in a control widget on the map that expands to show the options
         var layerControl = L.control.layers(null,{
             "All Shops": allShops,
-            "Hot Drinks": hotDrinks,
-            "Frozen Drinks": frozenDrinks,
-            "Cookies": cookies,
-            "Special Kids Drinks": kidsDrinks,
-            "Popcorn": popcorn,
+            "Sells Hot Drinks": hotDrinks,
+            "Sells Frozen Drinks": frozenDrinks,
+            "Sells Cookies": cookies,
+            "Has Special Kids Drinks": kidsDrinks,
+            "Sells Popcorn": popcorn,
             "12 oz. Option": smallSize
         },{collapsed: false}).addTo(map);
 
@@ -214,7 +214,7 @@
         updateChart(shopArray);
         
         //update the title of the pie chart
-        $('#legend-title-row').text("Distribution of Soda Shop Companies in Utah");
+        $('#legend-title-row').html("Distribution of Soda Shop<br>Companies in Utah");
     };
     
     //function to show shops based on county
@@ -223,7 +223,7 @@
         var geojsonMarkerOptions = {
             radius: 8,
             color: "#000",
-            weight: 1,
+            weight: 0.5,
             opacity: 1,
             fillOpacity: 0.8
         };
@@ -393,7 +393,7 @@
     //function to add a reset button to reset the map and all interactives to original state
     function addReset(data,map){
         //add the reset button to the appropriate div
-        $('#reset-row').append('<button id="reset">Reset</button>')
+        $('#reset-row').append('<button id="reset"><span id="reset-text">Reset</span></button>')
 
         /*when reset button is clicked then remove county layers, reset the map to original extent and zoom,
         remove all layers and the layer control widget from the map, add in the original layer and layer control,
@@ -462,7 +462,7 @@
 
     //function to update the legend title based on which county is selected
     function legendTitle(attribute){
-        $('#legend-title-row').text("Distribution of Soda Shop Companies in " + attribute);
+        $('#legend-title-row').html("Distribution of Soda Shop<br>Companies in " + attribute);
     };
     
         //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
