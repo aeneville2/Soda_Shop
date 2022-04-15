@@ -27,7 +27,7 @@
     var legend = d3.legendColor()
         .shape('circle')
         .shapeRadius(8)
-        .shapePadding(100)
+        .shapePadding(75)
         .orient('horizontal')
         .scale(color)
         .labels(["Swig","Fiiz Drinks","Sodalicious","Twisted Sugar","Quench It!"]);
@@ -36,7 +36,7 @@
     var legendContainer = d3.select('#pie-chart-legend').append('svg').attr("class","legend-container")
     var legendG = legendContainer.append('g')
         .attr('class','pie-legend')
-        .attr('transform','translate(20,20)');
+        .attr('transform','translate(25,20)');
 
     //function to create the map
     function createMap(){
@@ -463,8 +463,8 @@
         $('#legend-title-row').html("Distribution of Soda Shop<br>Companies in " + attribute);
     };
     
-        //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
-        //function to create the pie chart to show the distribution by shop type
+    //d3-graph-gallery.com/graph/pie_annotation.html and www.tutorialsteacher.com/d3js/create-pie-chart-using-d3js
+    //function to create the pie chart to show the distribution by shop type
     function updateChart(shopArray){
         //count the number of each shop type from the array of companies
         let swig = 0;
@@ -545,11 +545,9 @@
             dataType: "json",
             success: function(response){
                 createShopSymbols(response,map);
-                //addFilters(response,map);
                 addCounty(map);
                 addReset(response,map);
                 filterCounty(response,map);
-                //addFilters(response,map);
             }
         });
     };
